@@ -1,31 +1,25 @@
-import tkinter as tk
+from nicegui import ui, app
+
 
 class WaterReminderGUI:
-    def __init__(self, root):
-        self.root = root
-        self.root.geometry("400x300")
-        self.root.attributes('-topmost', True)
-        
-        self.label = tk.Label(root, text="Drink Water!", font=("Arial", 28, "bold"), fg="blue")
-        self.label.pack(pady=30) 
+    def __init__(self):
+        self.label = ui.label("Drink Water!").style(
+            "color: blue; font-size: 28px; font-weight: bold;"
+        )
+        self.drink_btn = ui.button("שתיתי מים!", on_click=self.on_drink).style(
+            "font-size: 16px;"
+        )
+        ui.timer(120, self.show_window, once=True)
 
-        self.drink_btn = tk.Button(root, text="שתיתי מים!", font=("Arial", 16), command=self.on_drink)
-        self.drink_btn.pack(pady=10)
-
-        self.quit_btn = tk.Button(root, text="סגור תזכורת לחלוטין", font=("Arial", 12), fg="red", command=self.root.destroy)
-        self.quit_btn.pack(pady=10)
-
-        self.root.withdraw()
-        
-        self.root.after(120000, self.show_window) 
+    def hide_window(self):
+        app.native.main_window.hide()
 
     def show_window(self):
-        self.root.deiconify()
+        app.native.main_window.show()
 
     def on_drink(self):
-        self.root.withdraw()
-        
-        self.root.after(120000, self.show_window)
+        self.hide_window()
+        ui.timer(60, self.show_window, once=True)
         
 
 

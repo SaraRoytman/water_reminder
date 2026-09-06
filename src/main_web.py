@@ -1,4 +1,3 @@
-
 from nicegui import ui
 from gui import WaterReminderGUI
 
@@ -6,4 +5,4 @@ from gui import WaterReminderGUI
 def main_page():
     WaterReminderGUI()
 
-ui.run(native=True, window_size=(400, 300), reload=False)
+ui.run(host="0.0.0.0", port=5000, native=False, reload=False)
