@@ -27,7 +27,7 @@ class WaterReminderGUI:
 
     def on_drink(self):
         self.hide_window()
-        ui.timer(120, self.show_window, once=True)
+        ui.timer(360, self.show_window, once=True)
         
 
 
