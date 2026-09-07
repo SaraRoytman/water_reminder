@@ -1,9 +1,8 @@
 
-from nicegui import ui
 from gui import WaterReminderGUI
+from nicegui import ui
 
-@ui.page("/")
-def main_page():
-    WaterReminderGUI()
+WaterReminderGUI()
 
-ui.run(native=True, window_size=(400, 300), reload=False)
+ui.run(title="Water Reminder", native=True, reload=False)
+

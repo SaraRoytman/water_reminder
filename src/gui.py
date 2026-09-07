@@ -1,12 +1,15 @@
+
 from nicegui import ui, app
 
 
 class WaterReminderGUI:
     def __init__(self):
+
+        ui.query('body').classes('bg-pink-100')
         self.label = ui.label("Drink Water!").style(
             "color: blue; font-size: 28px; font-weight: bold;"
         )
-        self.drink_btn = ui.button("שתיתי מים!", on_click=self.on_drink).style(
+        self.drink_btn = ui.button("!שתיתי כבר", on_click=self.on_drink).style(
             "font-size: 16px;"
         )
         ui.timer(120, self.show_window, once=True)
@@ -28,6 +31,12 @@ class WaterReminderGUI:
     def on_drink(self):
         self.hide_window()
         ui.timer(360, self.show_window, once=True)
+
+
+
+
+
+
         
 
 

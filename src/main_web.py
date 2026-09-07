@@ -1,9 +1,8 @@
-import os
-from nicegui import ui
 from gui import WaterReminderGUI
+from nicegui import ui
+import os
 
-@ui.page("/")
-def main_page():
-    WaterReminderGUI()
+WaterReminderGUI()
 
-ui.run(host="0.0.0.0", port=int(os.environ.get("PORT" ,5000)), native=False, reload=False)
+port = int(os.environ.get("PORT", 8080))
+ui.run(host="0.0.0.0", port=port, title="Water Reminder", native=False, reload=False)
