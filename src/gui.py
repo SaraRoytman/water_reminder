@@ -1,17 +1,22 @@
 
 from nicegui import ui, app
 
-
 class WaterReminderGUI:
     def __init__(self):
+        # הגדרת גודל החלון במצב native (רוחב, גובה)
+        app.native.window_args['width'] = 500
+        app.native.window_args['height'] = 400
 
-        ui.query('body').classes('bg-pink-100')
-        self.label = ui.label("Drink Water!").style(
-            "color: blue; font-size: 28px; font-weight: bold;"
-        )
-        self.drink_btn = ui.button("!שתיתי כבר", on_click=self.on_drink).style(
-            "font-size: 16px;"
-        )
+        ui.query('body').style('background-color: oklch(80.8% 0.114 19.571);')
+        
+        with ui.column().classes('w-full h-screen items-center justify-center gap-6'):
+            self.label = ui.label("Drink Water!").style(
+                "color: #1e3a8a; font-size: 32px; font-weight: bold;"
+            )
+            self.drink_btn = ui.button("!שתיתי כבר", on_click=self.on_drink).classes(
+                'px-6 py-3 text-lg bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700'
+            )
+            
         ui.timer(120, self.show_window, once=True)
 
     def hide_window(self):
