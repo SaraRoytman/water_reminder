@@ -5,8 +5,8 @@ from logic import WaterTracker
 class WaterReminderGUI:
     def __init__(self):
         
-        app.native.window_args['width'] = 350
-        app.native.window_args['height'] = 350
+        app.native.window_args['width'] = 370
+        app.native.window_args['height'] = 370
 
         ui.query('body').classes('bg-stone-700 overflow-hidden')
 
@@ -18,6 +18,7 @@ class WaterReminderGUI:
             
             self.drink_btn = ui.button("500 מ״ל", on_click=lambda: self.on_drink(self.tracker.add_tub0), color='light-blue-4').classes('font-mono font-bold text-lg text-black')
             self.drink_btn_250 = ui.button("250 מ״ל", on_click=lambda: self.on_drink(self.tracker.add_tub1), color='light-blue-4').classes('font-mono font-bold text-lg text-black')
+            self.drink_sip = ui.button("שלוק" , on_click=lambda: self.on_drink(self.tracker.add_tub2), color='light-blue-4').classes('font-mono font-bold text-lg text-black')
             self.tmp_btn = ui.button(on_click=self.hide_window, color='white').classes('absolute right-2 top-1/2 -translate-y-1/2')
 
             
