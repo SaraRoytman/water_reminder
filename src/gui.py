@@ -30,13 +30,17 @@ class WaterReminderGUI:
         else:
             self.label.set_visibility(False)
             self.drink_btn.set_visibility(False)
+            self.drink_btn_250.set_visibility(False)
+            self.drink_sip.set_visibility(False)
         
     def show_window(self):
         if app.native.main_window:
             app.native.main_window.show()
         else:
             self.label.set_visibility(True)
-            self.drink_btn.set_visibility(True)   
+            self.drink_btn.set_visibility(True)
+            self.drink_btn_250.set_visibility(True) 
+            self.drink_sip.set_visibility(True)  
 
     def on_drink(self, add_func):
 
