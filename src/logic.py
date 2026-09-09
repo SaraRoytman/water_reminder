@@ -13,4 +13,6 @@ class WaterTracker:
     def add_tub2(self, amount = 20):
         self.consumed += amount
         return self.consumed
-        
+
+    def add_amount(self, amount):
+        self.consumed += amount    
