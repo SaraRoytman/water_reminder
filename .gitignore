@@ -1,0 +1,13 @@
+.env
+
+.nicegui/
+
+venv/
+env/
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.vscode/
