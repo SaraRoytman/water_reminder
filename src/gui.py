@@ -4,8 +4,8 @@ from nicegui import ui, app
 from logic import WaterTracker
 
 
-app.native.window_args['width'] = 370
-app.native.window_args['height'] = 370
+app.native.window_args['width'] = 375
+app.native.window_args['height'] = 375
 
 @ui.page('/')
 def main_page():
