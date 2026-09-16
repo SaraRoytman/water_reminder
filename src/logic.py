@@ -15,8 +15,12 @@ class WaterTracker:
         self.consumed += amount
         return self.consumed
 
-    def add_coffe(self, amount = 250):
-        self.consumed += amount
+    def add_caffe(self, fine = 100):
+        self.consumed -= fine
+        return self.consumed
+    
+    def add_xl(self, fine = 150):
+        self.consumed -= fine
         return self.consumed
 
     def add_amount(self, amount):
