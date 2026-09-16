@@ -5,7 +5,7 @@ from logic import WaterTracker
 
 
 app.native.window_args['width'] = 375
-app.native.window_args['height'] = 375
+app.native.window_args['height'] = 450
 
 @ui.page('/')
 def main_page():
@@ -37,6 +37,7 @@ class WaterReminderGUI:
             self.drink_btn = ui.button("500 מ״ל", on_click=lambda: self.on_drink(self.tracker.add_tub0), color='light-blue-4').classes('font-mono font-bold text-lg text-black')
             self.drink_btn_250 = ui.button("250 מ״ל", on_click=lambda: self.on_drink(self.tracker.add_tub1), color='light-blue-4').classes('font-mono font-bold text-lg text-black')
             self.drink_sip = ui.button("שלוק" , on_click=self.show_sip_input, color='light-blue-4').classes('font-mono font-bold text-lg text-black')
+            self.drink_coffe = ui.button("קפה", on_click= lambda: self.on_drink(self.tracker.add_coffe), color='brown').classes('font-mono font-bold text-lg text-black')
 
             with ui.row().classes('items-center gap-2') as self.sip_input_container:
                 self.sip_input_container.set_visibility(False)
