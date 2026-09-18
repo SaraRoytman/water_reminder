@@ -1,6 +1,8 @@
 .env
 
 .nicegui/
+storage-general.json
+storage-user.json
 
 venv/
 env/
