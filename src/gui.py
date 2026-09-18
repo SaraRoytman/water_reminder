@@ -3,9 +3,13 @@ from datetime import date
 from nicegui import ui, app
 from logic import WaterTracker
 
-
 app.native.window_args['width'] = 470
 app.native.window_args['height'] = 470
+
+def get_storage():
+    if app.native.main_window:
+        return app.storage.general
+    return app.storage.user
 
 @ui.page('/')
 def main_page():
@@ -16,15 +20,17 @@ class WaterReminderGUI:
 
         ui.query('body').classes('bg-stone-700 overflow-hidden')
 
+        storage = get_storage()
+
         today_str = date.today().isoformat() 
-        saved_date = app.storage.user.get('last_date', today_str)
+        saved_date = storage.get('last_date', today_str)
 
         if saved_date != today_str:
-            app.storage.user['water_consumed'] = 0
-            app.storage.user['last_date'] = today_str
+            storage['water_consumed'] = 0
+            storage['last_date'] = today_str
             saved_amount = 0
         else:
-            saved_amount = app.storage.user.get('water_consumed', 0)
+            saved_amount = storage.get('water_consumed', 0)
         
         self.tracker = WaterTracker(init_amount=saved_amount)
 
@@ -51,7 +57,6 @@ class WaterReminderGUI:
             
             self.tmp_btn = ui.button(on_click=self.hide_window, color='white').classes('absolute right-2 top-1/2 -translate-y-1/2')
         
-            
         ui.timer(360, self.show_window)
 
     def hide_window(self):
@@ -77,14 +82,15 @@ class WaterReminderGUI:
             self.caffeine_btn.set_visibility(True)
 
     def on_drink(self, add_func):
+        storage = get_storage()
+        
         today_str = date.today().isoformat()
-        if app.storage.user.get('last_date') != today_str:
+        if storage.get('last_date') != today_str:
             self.tracker.consumed = 0
-            app.storage.user['last_date'] = today_str
+            storage['last_date'] = today_str
 
         add_func()
-        
-        app.storage.user['water_consumed'] = self.tracker.consumed
+        storage['water_consumed'] = self.tracker.consumed
         
         self.total_label.set_text(f"{self.tracker.consumed} ml today")
         
