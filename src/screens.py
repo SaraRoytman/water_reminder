@@ -11,7 +11,7 @@ class user_select_screen:
     def __init__(self, on_select):
         ui.label("who are you? ").classes('text-white text-3xl font-semibold')
         with ui.row().classes('gap-6 mt-4'):
-            ui.button("Student", on_click=lambda: on_select('Student'), color='teal').classes('font-bold text-xl px-6 py-2')
+            ui.button("Developer", on_click=lambda: on_select('Student'), color='teal').classes('font-bold text-xl px-6 py-2')
             ui.button("Guest", on_click=lambda: on_select('Guest'), color='grey').classes('font-bold text-xl px-6 py-2')
 
 class Main_tracker_screen:
