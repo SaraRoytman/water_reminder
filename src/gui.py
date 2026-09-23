@@ -25,6 +25,14 @@ class WaterReminderGUI:
         with self.tracker_container:
             self.tracker_screen = Main_tracker_screen(on_back=self.show_selection_screen, on_finish=self.hide_window)
 
+        if app.native.main_window:
+            self.selection_container.set_visibility(False)
+            self.tracker_screen.load_user('Developer')
+            self.tracker_container.set_visibility(True)
+        else:
+            self.tracker_container.set_visibility(False)
+            self.selection_container.set_visibility(True)
+
         ui.timer(360, self.show_window)
 
     def on_user_selected(self, user_type):

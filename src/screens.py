@@ -2,8 +2,8 @@ from datetime import date
 from nicegui import ui, app
 from logic import WaterTracker
 
-def get_storage():
-    if app.native.main_window:
+def get_storage(user_type = None):
+    if app.native.main_window or user_type == 'Developer':
         return app.storage.general
     return app.storage.user
 
@@ -45,7 +45,7 @@ class Main_tracker_screen:
 
     def load_user(self, user_type):
         self.current_user = user_type
-        storage = get_storage()
+        storage = get_storage(self.current_user)
         today_str = date.today().isoformat()
 
         date_key = f"{self.current_user}_last_date"
@@ -64,7 +64,7 @@ class Main_tracker_screen:
         self.total_label.set_text(f"{self.tracker.consumed} ml today ({self.current_user})")
 
     def on_drink(self, add_func):
-        storage = get_storage()
+        storage = get_storage(self.current_user)
         today_str = date.today().isoformat()
         
         
