@@ -1,11 +1,16 @@
+import os
 from datetime import date
 from nicegui import ui, app
+from mongomock import MongoClient
+from dotenv import load_dotenv
 from logic import WaterTracker
 
-def get_storage(user_type = None):
-    if app.native.main_window or user_type == 'Developer':
-        return app.storage.general
-    return app.storage.user
+load_dotenv() 
+MONGO_URI = os.getenv("MONGO_URI")
+
+client = MongoClient(MONGO_URI)
+db = client["water_app"]
+collection = db["daily_logs"]
 
 class user_select_screen:
     def __init__(self, on_select):
@@ -20,6 +25,7 @@ class Main_tracker_screen:
         self.on_finish = on_finish
         self.current_user = None 
         self.tracker = None
+        self.current_date = None
 
         self.label = ui.label("Drink Water!").classes('text-red-500 text-2xl font-semibold')
         self.total_label = ui.label("").classes('text-white text-md font-mono')
@@ -39,45 +45,34 @@ class Main_tracker_screen:
             self.sip_input = ui.number(value=1, format='%.0f').classes('w-24 bg-white rounded').props('dense')
             ui.button("✓", on_click=self.on_custom_sip, color='green-4').classes('min-w-[40px]')
             ui.button("✗", on_click=self.hide_sip_input, color='red-4').classes('min-w-[40px]')
-
         
         ui.button("Back", on_click=self.on_back, color='white').classes('absolute right-2 top-1/2 -translate-y-1/2')
 
     def load_user(self, user_type):
         self.current_user = user_type
-        storage = get_storage(self.current_user)
-        today_str = date.today().isoformat()
+        self.current_date = date.today().isoformat()
 
-        date_key = f"{self.current_user}_last_date"
-        amount_key = f"{self.current_user}_water_consumed"
-
-        saved_date = storage.get(date_key, today_str)
-
-        if saved_date != today_str:
-            storage[amount_key] = 0
-            storage[date_key] = today_str
-            saved_amount = 0
-        else:
-            saved_amount = storage.get(amount_key, 0)
+        record = collection.find_one({"user": self.current_user, "date": self.current_date})
+        
+        saved_amount = record["amount"] if record else 0
 
         self.tracker = WaterTracker(init_amount=saved_amount)
         self.total_label.set_text(f"{self.tracker.consumed} ml today ({self.current_user})")
 
     def on_drink(self, add_func):
-        storage = get_storage(self.current_user)
         today_str = date.today().isoformat()
         
-        
-        date_key = f"{self.current_user}_last_date"
-        amount_key = f"{self.current_user}_water_consumed"
-
-        
-        if storage.get(date_key) != today_str:
+        if self.current_date != today_str:
             self.tracker.consumed = 0
-            storage[date_key] = today_str
+            self.current_date = today_str
 
         add_func()
-        storage[amount_key] = self.tracker.consumed
+
+        collection.update_one(
+            {"user": self.current_user, "date": today_str},
+            {"$set": {"amount": self.tracker.consumed}},
+            upsert=True
+        )
         
         self.total_label.set_text(f"{self.tracker.consumed} ml today ({self.current_user})")
        
