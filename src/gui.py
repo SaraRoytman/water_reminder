@@ -36,7 +36,7 @@ class WaterReminderGUI:
             self.tracker_box.set_visibility(False)
             self.selection_box.set_visibility(True)
 
-        # immediate=False מונע מהטיימר לרוץ ברגע פתיחת האפליקציה
+       
         ui.timer(360, self.show_window, immediate=False)
 
     def cancel_hide_timer(self):
@@ -68,6 +68,7 @@ class WaterReminderGUI:
         
     def show_window(self):
         if app.native.main_window:
+            ui.timer(0.01, self.tracker_screen.sync_from_db, once=True)
             app.native.main_window.show()
             self.schedule_hide(10)
         else:
