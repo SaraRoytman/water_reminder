@@ -16,6 +16,13 @@ class WaterReminderGUI:
 
         self.selection_box = ui.column().classes('w-full h-screen items-center justify-center gap-6')
         self.tracker_box = ui.column().classes('w-full h-screen items-center justify-center gap-6')
+       
+        self.sleep_box = ui.column().classes('w-full h-screen items-center justify-center gap-4')
+        self.sleep_box.set_visibility(False)
+        with self.sleep_box:
+            ui.label("כל הכבוד! 💧").classes('text-teal-400 text-3xl font-bold')
+            ui.label("התזכורת הבאה בעוד 6 דקות").classes('text-white text-lg')
+            ui.button("חזור למסך שתייה", on_click=self.wake_up_web, color='teal').classes('mt-4 font-bold')
 
         self.tracker_box.set_visibility(False)
 
@@ -36,7 +43,6 @@ class WaterReminderGUI:
             self.tracker_box.set_visibility(False)
             self.selection_box.set_visibility(True)
 
-       
         ui.timer(360, self.show_window, immediate=False)
 
     def cancel_hide_timer(self):
@@ -50,13 +56,18 @@ class WaterReminderGUI:
 
     def on_user_selected(self, user_type):
         self.cancel_hide_timer()
+        # בקשת הרשאה להתראות בדפדפן בטלפון
+        if not app.native.main_window:
+            ui.run_javascript('if ("Notification" in window) Notification.requestPermission();')
         self.selection_box.set_visibility(False)
+        self.sleep_box.set_visibility(False)
         self.tracker_screen.load_user(user_type)
         self.tracker_box.set_visibility(True)
         
     def show_selection_screen(self):
         self.cancel_hide_timer()
         self.tracker_box.set_visibility(False)
+        self.sleep_box.set_visibility(False)
         self.selection_box.set_visibility(True)       
 
     def hide_window(self):
@@ -64,7 +75,14 @@ class WaterReminderGUI:
         if app.native.main_window:
             app.native.main_window.hide()
         else:
-            self.show_selection_screen()
+            self.tracker_box.set_visibility(False)
+            self.sleep_box.set_visibility(True)
+
+    def wake_up_web(self):
+        self.cancel_hide_timer()
+        self.sleep_box.set_visibility(False)
+        self.tracker_box.set_visibility(True)
+        ui.timer(0.01, self.tracker_screen.sync_from_db, once=True)
         
     def show_window(self):
         if app.native.main_window:
@@ -72,8 +90,14 @@ class WaterReminderGUI:
             app.native.main_window.show()
             self.schedule_hide(10)
         else:
-            self.selection_box.set_visibility(True)
-            self.tracker_box.set_visibility(False)
+            if self.tracker_screen.current_user:
+                self.wake_up_web()
+                ui.notify("הגיע הזמן לשתות מים! 💧", type='info', position='top')
+                ui.run_javascript('''
+                    if ("Notification" in window && Notification.permission === "granted") {
+                        new Notification("Water Reminder 💧", { body: "Drink Water!" });
+                    }
+                ''')
             
 
 
