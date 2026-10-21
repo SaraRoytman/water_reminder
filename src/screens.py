@@ -55,7 +55,6 @@ def fetch_user_amount_sync(user: str, current_date: str) -> int:
 
 
 def add_user_amount_sync(user: str, current_date: str, delta: int) -> int:
-    """מוסיף את הכמות גם בענן (HTTPS) וגם בקובץ המקומי"""
     current = fetch_user_amount_sync(user, current_date)
     new_amount = current + delta
     _write_local(user, current_date, new_amount)
@@ -106,7 +105,7 @@ class Main_tracker_screen:
             ui.button("✓", on_click=self.on_custom_sip, color='green-4').classes('min-w-[40px]')
             ui.button("✗", on_click=self.hide_sip_input, color='red-4').classes('min-w-[40px]')
         
-        ui.button("Back", on_click=self.on_back, color='white').classes('absolute right-2 top-1/2 -translate-y-1/2 text-black')
+        ui.button("Back", on_click=self.on_back, color='white').classes('absolute right-3 top-1/3 -translate-y-1/2 text-black')
 
         ui.timer(3.0, self.sync_from_db)
 

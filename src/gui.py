@@ -20,9 +20,9 @@ class WaterReminderGUI:
         self.sleep_box = ui.column().classes('w-full h-screen items-center justify-center gap-4')
         self.sleep_box.set_visibility(False)
         with self.sleep_box:
-            ui.label("כל הכבוד! 💧").classes('text-teal-400 text-3xl font-bold')
-            ui.label("התזכורת הבאה בעוד 6 דקות").classes('text-white text-lg')
-            ui.button("חזור למסך שתייה", on_click=self.wake_up_web, color='teal').classes('mt-4 font-bold')
+            ui.label("good!💧").classes('text-teal-400 text-3xl font-bold')
+            ui.label("see you in a few minutes!").classes('text-white text-lg')
+            ui.button("back", on_click=self.wake_up_web, color='teal').classes('mt-4 font-bold')
 
         self.tracker_box.set_visibility(False)
 
@@ -56,7 +56,6 @@ class WaterReminderGUI:
 
     def on_user_selected(self, user_type):
         self.cancel_hide_timer()
-        # בקשת הרשאה להתראות בדפדפן בטלפון
         if not app.native.main_window:
             ui.run_javascript('if ("Notification" in window) Notification.requestPermission();')
         self.selection_box.set_visibility(False)
@@ -92,7 +91,7 @@ class WaterReminderGUI:
         else:
             if self.tracker_screen.current_user:
                 self.wake_up_web()
-                ui.notify("הגיע הזמן לשתות מים! 💧", type='info', position='top')
+                ui.notify("drink now!!", type='info', position='top')
                 ui.run_javascript('''
                     if ("Notification" in window && Notification.permission === "granted") {
                         new Notification("Water Reminder 💧", { body: "Drink Water!" });
