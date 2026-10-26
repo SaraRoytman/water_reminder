@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 from logic import WaterTracker
 
 load_dotenv() 
-# הכתובת מ-Firebase Realtime Database (ללא סלאש בסוף)
 FIREBASE_URL = (os.getenv("FIREBASE_URL") or "").rstrip("/")
 LOCAL_BACKUP_FILE = "local_water_backup.json"
 
@@ -40,7 +39,6 @@ def _write_local(user: str, current_date: str, amount: int):
 
 
 def fetch_user_amount_sync(user: str, current_date: str) -> int:
-    """מושך את הכמות מ-Firebase דרך HTTPS רגיל (פורט 443 שלא נחסם) או מגיבוי מקומי"""
     if FIREBASE_URL:
         try:
             url = f"{FIREBASE_URL}/daily_logs/{user}/{current_date}.json"
